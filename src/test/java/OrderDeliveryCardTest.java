@@ -3,19 +3,26 @@ import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class OrderDeliveryCardTest {
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    String date = formatter.format(LocalDateTime.now().plusDays(5));
+
     @Test
     void OrderDeliveryCardTest() {
+
         open("http://localhost:9999");
         SelenideElement form = $(".form");
         form.$("[data-test-id=city] input").setValue("Хабаровск");
         form.$("[data-test-id=date] input").sendKeys(Keys.CONTROL + "a", Keys.DELETE);
-        form.$("[data-test-id=date] input").setValue("30.07.2020");
+        form.$("[data-test-id=date] input").setValue(date);
         form.$("[data-test-id=name] input").setValue("Поляков Александр");
         form.$("[data-test-id=phone] input").setValue("+79779778010");
         form.$("[data-test-id=agreement]").click();
@@ -26,7 +33,6 @@ public class OrderDeliveryCardTest {
 
     @Test
     void EmptyDateOrderDeliveryCardTest() {
-
         open("http://localhost:9999");
         SelenideElement form = $(".form");
         form.$("[data-test-id=city] input").setValue("Владивосток");
@@ -36,17 +42,14 @@ public class OrderDeliveryCardTest {
         form.$("[data-test-id=agreement]").click();
         form.$$("[role=button]").find(exactText("Забронировать")).click();
         $(".calendar-input[data-test-id=date]").shouldHave(exactText("Неверно введена дата"));
-
-
     }
 
     @Test
     void EmptyCityOrderDeliveryCardTest() {
-
         open("http://localhost:9999");
         SelenideElement form = $(".form");
         form.$("[data-test-id=date] input").sendKeys(Keys.CONTROL + "a", Keys.DELETE);
-        form.$("[data-test-id=date] input").setValue("30.07.2020");
+        form.$("[data-test-id=date] input").setValue(date);
         form.$("[data-test-id=name] input").setValue("Поляков Александр");
         form.$("[data-test-id=phone] input").setValue("+79779778010");
         form.$("[data-test-id=agreement]").click();
@@ -56,32 +59,28 @@ public class OrderDeliveryCardTest {
 
     @Test
     void EmptyNumberPhoneOrderDeliveryCardTest() {
-
         open("http://localhost:9999");
         SelenideElement form = $(".form");
         form.$("[data-test-id=date] input").sendKeys(Keys.CONTROL + "a", Keys.DELETE);
-        form.$("[data-test-id=date] input").setValue("30.07.2020");
+        form.$("[data-test-id=date] input").setValue(date);
         form.$("[data-test-id=name] input").setValue("Поляков Александр");
         form.$("[data-test-id=city] input").setValue("Хабаровск");
         form.$("[data-test-id=agreement]").click();
         form.$$("[role=button]").find(exactText("Забронировать")).click();
         $(".input_invalid[data-test-id=phone]").shouldHave(exactText("Мобильный телефон Поле обязательно для заполнения"));
-
     }
 
     @Test
     void EmptyNameOrderDeliveryCardTest() {
-
         open("http://localhost:9999");
         SelenideElement form = $(".form");
         form.$("[data-test-id=date] input").sendKeys(Keys.CONTROL + "a", Keys.DELETE);
-        form.$("[data-test-id=date] input").setValue("30.07.2020");
+        form.$("[data-test-id=date] input").setValue(date);
         form.$("[data-test-id=city] input").setValue("Хабаровск");
         form.$("[data-test-id=phone] input").setValue("+79779778010");
         form.$("[data-test-id=agreement]").click();
         form.$$("[role=button]").find(exactText("Забронировать")).click();
         $(".input_invalid[data-test-id=name]").shouldHave(exactText("Фамилия и имя Поле обязательно для заполнения"));
-
     }
 
     @Test
@@ -90,15 +89,13 @@ public class OrderDeliveryCardTest {
         SelenideElement form = $(".form");
         form.$("[data-test-id=city] input").setValue("Khabarovsk");
         form.$("[data-test-id=date] input").sendKeys(Keys.CONTROL + "a", Keys.DELETE);
-        form.$("[data-test-id=date] input").setValue("30.07.2020");
+        form.$("[data-test-id=date] input").setValue(date);
         form.$("[data-test-id=name] input").setValue("Ким Ю Чин");
         form.$("[data-test-id=phone] input").setValue("+79779778010");
         form.$("[data-test-id=agreement]").click();
         form.$$("[role=button]").find(exactText("Забронировать")).click();
         $(".input_invalid[data-test-id=city]").shouldHave(exactText("Доставка в выбранный город недоступна"));
-
     }
-
 
     @Test
     void ValidationCheckDateOrderDeliveryCardTest() {
@@ -121,7 +118,7 @@ public class OrderDeliveryCardTest {
         SelenideElement form = $(".form");
         form.$("[data-test-id=city] input").setValue("Владивосток");
         form.$("[data-test-id=date] input").sendKeys(Keys.CONTROL + "a", Keys.DELETE);
-        form.$("[data-test-id=date] input").setValue("30.07.2020");
+        form.$("[data-test-id=date] input").setValue(date);
         form.$("[data-test-id=name] input").setValue("Gogy");
         form.$("[data-test-id=phone] input").setValue("+79779778010");
         form.$("[data-test-id=agreement]").click();
@@ -136,7 +133,7 @@ public class OrderDeliveryCardTest {
         SelenideElement form = $(".form");
         form.$("[data-test-id=city] input").setValue("Москва");
         form.$("[data-test-id=date] input").sendKeys(Keys.CONTROL + "a", Keys.DELETE);
-        form.$("[data-test-id=date] input").setValue("30.07.2020");
+        form.$("[data-test-id=date] input").setValue(date);
         form.$("[data-test-id=name] input").setValue("Жак-Ив Кусто");
         form.$("[data-test-id=phone] input").setValue("898898989+");
         form.$("[data-test-id=agreement]").click();
@@ -151,15 +148,12 @@ public class OrderDeliveryCardTest {
         SelenideElement form = $(".form");
         form.$("[data-test-id=city] input").setValue("Москва");
         form.$("[data-test-id=date] input").sendKeys(Keys.CONTROL + "a", Keys.DELETE);
-        form.$("[data-test-id=date] input").setValue("30.07.2020");
+        form.$("[data-test-id=date] input").setValue(date);
         form.$("[data-test-id=name] input").setValue("Жак-Ив Кусто");
         form.$("[data-test-id=phone] input").setValue("+79779778010");
         form.$$("[role=button]").find(exactText("Забронировать")).click();
         $(".input_invalid[data-test-id=agreement]").shouldHave(exactText("Я соглашаюсь с условиями обработки и использования моих персональных данных"));
-
     }
-
-
 
     @Test
     void ICityAndDateСomplexElementsOrderDeliveryCardTest() {
@@ -167,7 +161,7 @@ public class OrderDeliveryCardTest {
         SelenideElement form = $(".form");
         form.$("[data-test-id=city] input").setValue("Са");
         $$(".menu-item__control").find(exactText("Санкт-Петербург")).click();
-        form.$("[data-test-id=date] input").setValue("30.07.2020");
+        form.$("[data-test-id=date] input").setValue(date);
         form.$("[data-test-id=name] input").setValue("Поляков Александр");
         form.$("[data-test-id=phone] input").setValue("+79779778010");
         form.$("[data-test-id=agreement]").click();
